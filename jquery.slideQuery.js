@@ -27,6 +27,33 @@
 
 (function($){
 
+    $.fn.extend({
 
+        slideQuery: function(options)
+        {
+
+            var opts = $.extend({slides: 'li', speed: 'slow', delay: 3000}, options),
+                el = this,
+                items = $(opts.slides, el),
+                interval = null,
+                idx = 0,
+                num = items.length;
+            return this.each(function(){
+                items.hide().css('opacity', 0);
+                items.eq(0).addClass('slideQueryActive').stop().animate({opacity: 1.0}, opts.speed).show();
+                if (num > 1) {
+                    interval = setInterval(function(){
+                        idx = (idx == (num - 1)) ? 0 : idx + 1;
+                        items.removeClass('slideQueryActive').stop().animate({opacity: 0}, opts.speed, null, function(){
+                            $(this).hide();
+                            items.eq(idx).addClass('slideQueryActive').stop().animate({opacity: 1.0}, opts.speed).show();
+                        });
+                    }, opts.delay)
+                }
+            });
+
+        }
+
+    });
 
 })(jQuery);

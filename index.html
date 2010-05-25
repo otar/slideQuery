@@ -5,8 +5,8 @@
     <title>slideQuery Example</title>
     <style type="text/css">
 
-        /* Your goal is to style slideshow as you wish */
-        #my-slideshow { width: 640px; height: 480px; border: 1px solid maroon }
+        /* Style slideshow as you wish */
+        #my-slideshow { width: 320px; height: 240px; border: 1px solid maroon }
         #my-slideshow li { list-style: none }
 
     </style>
@@ -19,10 +19,10 @@
             This is my first slide<br />
             <b>You must put slide content here, whatever it is: image, plain text or media...</b>
         </li>
-        <li>This is my second slide</li>
-        <li>This is my third slide</li>
-        <li>This is my fourth slide</li>
-        <li>This is my fifth slide</li>
+        <li>This is your second slide</li>
+        <li>This is your third slide</li>
+        <li>This is your fourth slide</li>
+        <li>This is your fifth slide</li>
     </ul>
 
 
@@ -32,7 +32,17 @@
         $(document).ready(function(){
 
             // Initialize slideshow plugin
-            //$('#my-slideshow').;
+            $('#my-slideshow').slideQuery();
+
+            /*
+             * Default options
+             * $('#my-slideshow').slideQuery({
+             *     slides: 'li',
+             *     speed: 'slow',
+             *     delay: 3000
+             * });
+             *
+             */
 
         });
     </script>
