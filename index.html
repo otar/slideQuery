@@ -13,18 +13,15 @@
 </head>
 <body>
 
-
     <ul id="my-slideshow">
         <li>
-            This is my first slide<br />
+            This is your first slide<br />
             <b>You must put slide content here, whatever it is: image, plain text or media...</b>
         </li>
         <li>This is your second slide</li>
         <li>This is your third slide</li>
         <li>This is your fourth slide</li>
-        <li>This is your fifth slide</li>
     </ul>
-
 
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="jquery.slideQuery.js"></script>
@@ -34,15 +31,22 @@
             // Initialize slideshow plugin
             $('#my-slideshow').slideQuery();
 
-            /*
-             * Default options
-             * $('#my-slideshow').slideQuery({
-             *     slides: 'li',
-             *     speed: 'slow',
-             *     delay: 3000
-             * });
-             *
-             */
+/*
+Default Options
+$('...').slideQuery({
+  slides: 'li',
+  speedIn: 'slow',
+  speedOut: 'slow',
+  delay: 3000,
+  startIndex: 0,
+  easing: 'swing',
+  events: {
+      init: null,
+      index: null,
+      start: null
+  }
+});
+*/
 
         });
     </script>

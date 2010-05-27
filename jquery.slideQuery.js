@@ -25,35 +25,72 @@
  *
  */
 
+function debug(data)
+{
+    console.log(data);
+}
+
 (function($){
 
-    $.fn.extend({
+    // Declare default options
+    var defaults = {
+          slides: 'li',
+          speedIn: 'slow',
+          speedOut: 'slow',
+          delay: 3000,
+          startIndex: 0,
+          easing: 'swing',
+          events: {
+              init: null,
+              index: null,
+              start: null,
+              hide: null,
+              show: null
+          }
+        },
+        opts = {},
+        idx = 0;
 
-        slideQuery: function(options)
-        {
+    $.fn.slideQuery = function(options)
+    {
+        // Combine user passed options with defaults
+        opts = $.extend({}, defaults, options);
 
-            var opts = $.extend({slides: 'li', speed: 'slow', delay: 3000}, options),
-                el = this,
-                items = $(opts.slides, el),
-                interval = null,
-                idx = 0,
-                num = items.length;
-            return this.each(function(){
-                items.hide().css('opacity', 0);
-                items.eq(0).addClass('slideQueryActive').stop().animate({opacity: 1.0}, opts.speed).show();
-                if (num > 1) {
-                    interval = setInterval(function(){
-                        idx = (idx == (num - 1)) ? 0 : idx + 1;
-                        items.removeClass('slideQueryActive').stop().animate({opacity: 0}, opts.speed, null, function(){
-                            $(this).hide();
-                            items.eq(idx).addClass('slideQueryActive').stop().animate({opacity: 1.0}, opts.speed).show();
-                        });
-                    }, opts.delay)
-                }
-            });
+        // Chain method and call plugin function
+        return this.each(function(ss){
 
-        }
+            // Declare essential variables
+            var me = $(this),
+                items = $(opts.slides, me),
+                count = items.length,
+                interval = null;
 
-    });
+            // Set slide counter index
+            idx = opts.startIndex;
+
+            // Call "init" event if exists
+            if ($.isFunction(opts.events.init)) {
+                opts.events.init.call(me);
+            }
+
+            // Hide all slides and set opacity to 0
+            items.hide().css('opacity', 0);
+
+            // Show a index slide with animation and attach an event
+            items.eq(idx).addClass('slide-query-active-item').stop().animate({opacity: 1.0}, opts.speedIn, opts.easing).show($.isFunction(opts.events.index) ? opts.events.index : null);
+
+            // Start automatic sliding if more than 1 slide exists
+            if (count > 1)
+            {
+                interval = setInterval(function(){
+                    idx = (idx == (count - 1)) ? 0 : idx + 1;
+                    items.filter('.slide-query-active-item').removeClass('slide-query-active-item').stop().animate({ opacity: 0 }, opts.speedOut, opts.easing).hide(function(){
+                        items.eq(idx).addClass('slide-query-active-item').stop().animate({ opacity: 1.0 }).show();
+                    });
+                }, opts.delay);
+            }
+
+        });
+    }
 
 })(jQuery);
