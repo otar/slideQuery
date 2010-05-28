@@ -30,7 +30,7 @@
     // Declare default options and variables
     var defaults =
         {
-            slides: 'li',
+            slides: null,
             speed: 'normal',
             delay: null,
             mouseOverStop: true,
@@ -61,14 +61,13 @@
                 {
                     // Declare essential variables
                     me[sq] = $(this),
-                    items[sq] = $(opts.slides, me[sq]),
+                    items[sq] = me[sq].children(opts.slides),
                     count[sq] = items[sq].length,
                     idx[sq] = opts.startIndex,
                     interval[sq] = null;
 
                     // Check if less than 1 slide exists
-                    if (count[sq] <= 1)
-                    {
+                    if (count[sq] <= 1) {
                         // Do not animate if there are no slides
                         return;
                     }
@@ -92,8 +91,7 @@
                         me[sq].hover(function(){
                             // Stop sliding
                             clearInterval(interval[sq]);
-                        },function()
-                        {
+                        }, function() {
                             // Continue sliding
                             plugin.start(sq);
                         });
@@ -113,22 +111,19 @@
                 idx[index] = idx[index] == (count[index] - 1) ? 0 : idx[index] + 1;
 
                 // Switch to newly indexed slide
-                items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item').fadeToggle(opts.speedOut, function()
-                {
+                items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item').fadeToggle(opts.speedOut, function(){
                     items[index].eq(idx[index]).addClass('slide-query-active-item').fadeToggle(opts.speedIn);
                 });
             }
         };
 
     $.fn.extend({
-        slideQuery: function(options)
-        {
+        slideQuery: function(options) {
             plugin.initialize(this, options);
+        },
+        fadeToggle: function(speed, easing, callback) {
+            return this.animate({opacity: 'toggle'}, speed, easing, callback);
         }
     });
-
-    $.fn.fadeToggle = function(speed, easing, callback) {
-        return this.animate({opacity: 'toggle'}, speed, easing, callback);
-    };
 
 })(jQuery);
