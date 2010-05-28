@@ -40,13 +40,6 @@ function debug(data)
           delay: 3000,
           startIndex: 0,
           easing: 'swing',
-          events: {
-              init: null,
-              index: null,
-              start: null,
-              hide: null,
-              show: null
-          }
         },
         opts = {},
         idx = 0;
@@ -68,16 +61,12 @@ function debug(data)
             // Set slide counter index
             idx = opts.startIndex;
 
-            // Call "init" event if exists
-            if ($.isFunction(opts.events.init)) {
-                opts.events.init.call(me);
-            }
 
             // Hide all slides and set opacity to 0
             items.hide().css('opacity', 0);
 
-            // Show a index slide with animation and attach an event
-            items.eq(idx).addClass('slide-query-active-item').stop().animate({opacity: 1.0}, opts.speedIn, opts.easing).show($.isFunction(opts.events.index) ? opts.events.index : null);
+            // Show a index slide with animation
+            items.eq(idx).addClass('slide-query-active-item').stop().animate({opacity: 1.0}, opts.speedIn, opts.easing).show();
 
             // Start automatic sliding if more than 1 slide exists
             if (count > 1)
