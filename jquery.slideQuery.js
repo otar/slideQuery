@@ -25,15 +25,14 @@
  *
  */
 
-(function($)
-{
+(function($){
 
     // Declare default options
     var defaults =
         {
             slides: 'li',
             speed: 'slow',
-            delay: 5000,
+            delay: null,
             mouseOverStop: true,
             speedIn: null,
             speedOut: null,
@@ -46,29 +45,30 @@
         count = [],
         idx = [],
         interval = [],
+        delay = [],
         plugin =
         {
-
-            slideQuery: function(options)
+            initialize: function(object, options)
             {
-
-                // Combine user passed options with defaults
-                opts = $.extend({}, defaults, options);
+                // Combine user set options with defaults is arguments passed
+                opts = options ? $.extend({}, defaults, options) : defaults;
 
                 // Set slide show and hide event speed depended on "speed" option
                 opts.speedIn = opts.speedIn || opts.speed;
                 opts.speedOut = opts.speedOut || opts.speed;
 
                 // Chain method and call plugin function
-                return this.each(function(sq)
+                return object.each(function(sq)
                 {
-
                     // Declare essential variables
                     me[sq] = $(this),
                     items[sq] = $(opts.slides, me[sq]),
                     count[sq] = items[sq].length,
                     idx[sq] = opts.startIndex,
                     interval[sq] = null;
+
+                    // Check if delay is set and set it to slides number * 1000 defaultly 
+                    delay[sq] = opts.delay == null ? count[sq] * 1000 : opts.delay;
 
                     // Hide all slides and set opacity to 0
                     items[sq].hide().css('opacity', 0);
@@ -79,65 +79,50 @@
                     // Check if more than 1 slide exists
                     if (count[sq] > 1)
                     {
-
                         // Start automatic sliding
-                        plugin.slideQueryStart(sq);
+                        plugin.start(sq);
 
                         // Check if stopping on mouse over is available
                         if (opts.mouseOverStop)
                         {
-
                             // Stop slideshow on mouse enter and continue on leave
-                            me[sq].hover(function()
-                            {
-
+                            me[sq].hover(function(){
                                 // Stop sliding
                                 clearInterval(interval[sq]);
-
-                            }, function()
+                            },function()
                             {
-
                                 // Continue sliding
-                                plugin.slideQueryStart(sq);
-
+                                plugin.start(sq);
                             });
-
                         }
-
                     }
-
                 });
-
             },
-
-            slideQueryStart: function(index)
+            start: function(index)
             {
-
                 // Start sliding
-                interval[index] = setInterval(function()
-                {
-                    plugin.slideQuerySwitch(index);
-                },
-                opts.delay);
-
+                interval[index] = setInterval(function(){
+                    plugin.change(index);
+                }, delay[index]);
             },
-
-            slideQuerySwitch: function(index)
+            change: function(index)
             {
-
                 // Set new slide index
                 idx[index] = idx[index] == (count[index] - 1) ? 0 : idx[index] + 1;
 
-                // Switch to slide pointed as index argument
+                // Switch to newly indexed slide
                 items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item').stop().animate({ opacity: 0 }, opts.speedOut, opts.easing).hide(function()
                 {
                     items[index].eq(idx[index]).addClass('slide-query-active-item').stop().animate({ opacity: 1.0 }).show();
                 });
-
             }
-
         };
 
-    $.fn.extend(plugin);
+    $.fn.extend({
+        slideQuery: function(options)
+        {
+            plugin.initialize(this, options);
+        }
+    });
 
 })(jQuery);
