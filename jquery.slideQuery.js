@@ -1,5 +1,5 @@
 /*
- * slideQuery 1.1
+ * slideQuery 1.1.1
  * Slideshow plugin for jQuery
  *
  * Copyright (c) 2010 Otar Chekurishvili
@@ -27,7 +27,7 @@
 
 (function($){
 
-    // Declare default options
+    // Declare default options and variables
     var defaults =
         {
             slides: 'li',
@@ -66,14 +66,14 @@
                     idx[sq] = opts.startIndex,
                     interval[sq] = null;
 
-                    // Check if delay is set and set it to slides number * 1000 defaultly 
+                    // Check if delay is not set and set it to slides number * 1000 defaultly 
                     delay[sq] = opts.delay == null ? count[sq] * 1000 : opts.delay;
 
                     // Hide all slides
                     items[sq].hide();
 
                     // Show a index slide with animation
-                    items[sq].eq(idx[sq]).addClass('slide-query-active-item').fadeIn(opts.speedIn);
+                    items[sq].eq(idx[sq]).addClass('slide-query-active-item').fadeToggle(opts.speedIn);
 
                     // Check if more than 1 slide exists
                     if (count[sq] > 1)
@@ -110,9 +110,9 @@
                 idx[index] = idx[index] == (count[index] - 1) ? 0 : idx[index] + 1;
 
                 // Switch to newly indexed slide
-                items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item').fadeOut(opts.speedOut, function()
+                items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item').fadeToggle(opts.speedOut, function()
                 {
-                    items[index].eq(idx[index]).addClass('slide-query-active-item').fadeIn(opts.speedIn);
+                    items[index].eq(idx[index]).addClass('slide-query-active-item').fadeToggle(opts.speedIn);
                 });
             }
         };
@@ -123,5 +123,9 @@
             plugin.initialize(this, options);
         }
     });
+
+    $.fn.fadeToggle = function(speed, easing, callback) {
+        return this.animate({opacity: 'toggle'}, speed, easing, callback);
+    };
 
 })(jQuery);
