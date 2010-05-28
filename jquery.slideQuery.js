@@ -1,5 +1,5 @@
 /*
- * slideQuery 1.0
+ * slideQuery 1.1
  * Slideshow plugin for jQuery
  *
  * Copyright (c) 2010 Otar Chekurishvili

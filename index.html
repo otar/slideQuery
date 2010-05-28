@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="content-yype" content="text/html; charset=utf-8" />
-    <title>slideQuery Example</title>
+    <meta name="author" content="Otar Chekurishvili - @ochekurishvili" />
+    <title>slideQuery Examples</title>
     <style type="text/css">
 
         /*
@@ -35,36 +36,35 @@
         <li><b>Slideshow 3:</b> third slide <b>(3/3)</b></li>
     </ul>
 
-    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="jquery.slideQuery.js"></script>
     <script type="text/javascript">
+
         $(document).ready(function(){
 
             // Initialize slideshow plugin
-            $('.my-slideshow').slideQuery({
-                mouseOverStop: false
-            });
+            $('.my-slideshow').slideQuery();
 
-            /* Default Options
+            /*
 
-                $('...').slideQuery({
-                    slides: 'li',
-                    speed: 'slow',
-                    delay: 5000,
-                    mouseOverStop: true,
-                    speedIn: null,
-                    speedOut: null,
-                    startIndex: 0,
-                    easing: 'swing'
-                });
+                Default Options
+                ===============
+
+                    $('...').slideQuery({
+                        slides: 'li',
+                        speed: 'slow',
+                        delay: 5000,
+                        mouseOverStop: true,
+                        speedIn: null,
+                        speedOut: null,
+                        startIndex: 0,
+                        easing: 'swing'
+                    });
 
             */
 
         });
+
     </script>
 
 </body>
