@@ -35,9 +35,10 @@ function debug(data)
     // Declare default options
     var defaults = {
           slides: 'li',
-          speedIn: 'slow',
-          speedOut: 'slow',
-          delay: 3000,
+          speed: 'slow',
+          speedIn: null,
+          speedOut: null,
+          delay: 5000,
           startIndex: 0,
           easing: 'swing',
         },
@@ -52,6 +53,10 @@ function debug(data)
     {
         // Combine user passed options with defaults
         opts = $.extend({}, defaults, options);
+
+        // Set slide show and hide event speed depended on "speed" option
+        opts.speedIn = opts.speedIn || opts.speed;
+        opts.speedOut = opts.speedOut || opts.speed;
 
         // Chain method and call plugin function
         return this.each(function(sq) {

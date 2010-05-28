@@ -5,8 +5,12 @@
     <title>slideQuery Example</title>
     <style type="text/css">
 
-        /* Style slideshow as you wish */
-        .my-slideshow { width: 320px; height: 240px; border: 1px solid maroon }
+        /*
+            Style slideshow as you wish but do not forget to declare
+            width and height for the main slideshow element. It solves
+            the problem browser window jumping problem.
+        */
+        .my-slideshow { width: 320px; height: 140px; border: 1px solid maroon }
         .my-slideshow li { list-style: none }
 
     </style>
@@ -14,27 +18,26 @@
 <body>
 
     <ul class="my-slideshow">
-        <li>
-            This is your first slide<br />
-            <b>You must put slide content here, whatever it is: image, plain text or media...</b>
-        </li>
-        <li>This is your second slide</li>
-        <li>This is your third slide</li>
-        <li>This is your fourth slide</li>
+        <li><b>Slideshow 1:</b> first slide <b>(1/4)</b></li>
+        <li><b>Slideshow 1:</b> second slide <b>(2/4)</b></li>
+        <li><b>Slideshow 1:</b> third slide <b>(3/4)</b></li>
+        <li><b>Slideshow 1:</b> fourth slide <b>(4/4)</b></li>
     </ul>
 
     <ul class="my-slideshow">
-        <li>
-            This is your first slide<br />
-            <b>You must put slide content here, whatever it is: image, plain text or media...</b>
-        </li>
-        <li>This is your second slide</li>
+        <li><b>Slideshow 2:</b> first slide <b>(1/2)</b></li>
+        <li><b>Slideshow 2:</b> second slide <b>(2/2)</b></li>
     </ul>
 
     <ul class="my-slideshow">
-        <li>This is your second slide</li>
-        <li>This is your third slide</li>
+        <li><b>Slideshow 3:</b> first slide <b>(1/3)</b></li>
+        <li><b>Slideshow 3:</b> second slide <b>(2/3)</b></li>
+        <li><b>Slideshow 3:</b> third slide <b>(3/3)</b></li>
     </ul>
+
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="jquery.slideQuery.js"></script>
@@ -42,7 +45,10 @@
         $(document).ready(function(){
 
             // Initialize slideshow plugin
-            $('.my-slideshow').slideQuery();
+            $('.my-slideshow').slideQuery({
+                speedIn: 'normal',
+                speedOut: 'normal'
+            });
 
             /* Default Options
 
