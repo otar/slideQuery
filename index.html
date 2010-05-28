@@ -45,17 +45,21 @@
         $(document).ready(function(){
 
             // Initialize slideshow plugin
-            $('.my-slideshow').slideQuery();
+            $('.my-slideshow').slideQuery({
+                mouseOverStop: false
+            });
 
             /* Default Options
 
                 $('...').slideQuery({
-                  slides: 'li',
-                  speedIn: 'slow',
-                  speedOut: 'slow',
-                  delay: 3000,
-                  startIndex: 0,
-                  easing: 'swing'
+                    slides: 'li',
+                    speed: 'slow',
+                    delay: 5000,
+                    mouseOverStop: true,
+                    speedIn: null,
+                    speedOut: null,
+                    startIndex: 0,
+                    easing: 'swing'
                 });
 
             */

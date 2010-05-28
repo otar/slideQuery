@@ -25,22 +25,20 @@
  *
  */
 
-function debug(data)
+(function($)
 {
-    console.log(data);
-}
-
-(function($){
 
     // Declare default options
-    var defaults = {
-          slides: 'li',
-          speed: 'slow',
-          speedIn: null,
-          speedOut: null,
-          delay: 5000,
-          startIndex: 0,
-          easing: 'swing'
+    var defaults =
+        {
+            slides: 'li',
+            speed: 'slow',
+            delay: 5000,
+            mouseOverStop: true,
+            speedIn: null,
+            speedOut: null,
+            startIndex: 0,
+            easing: 'swing'
         },
         opts = {},
         me = [],
@@ -48,9 +46,12 @@ function debug(data)
         count = [],
         idx = [],
         interval = [],
-        plugin = {
+        plugin =
+        {
+
             slideQuery: function(options)
             {
+
                 // Combine user passed options with defaults
                 opts = $.extend({}, defaults, options);
 
@@ -59,7 +60,8 @@ function debug(data)
                 opts.speedOut = opts.speedOut || opts.speed;
 
                 // Chain method and call plugin function
-                return this.each(function(sq) {
+                return this.each(function(sq)
+                {
 
                     // Declare essential variables
                     me[sq] = $(this),
@@ -74,23 +76,66 @@ function debug(data)
                     // Show a index slide with animation
                     items[sq].eq(idx[sq]).addClass('slide-query-active-item').stop().animate({opacity: 1.0}, opts.speedIn, opts.easing).show();
 
-                    // Start automatic sliding if more than 1 slide exists
+                    // Check if more than 1 slide exists
                     if (count[sq] > 1)
                     {
-                        interval[sq] = setInterval(function(){
-                            plugin.slideQuerySwitch(sq);
-                        }, opts.delay);
+
+                        // Start automatic sliding
+                        plugin.slideQueryStart(sq);
+
+                        // Check if stopping on mouse over is available
+                        if (opts.mouseOverStop)
+                        {
+
+                            // Stop slideshow on mouse enter and continue on leave
+                            me[sq].hover(function()
+                            {
+
+                                // Stop sliding
+                                clearInterval(interval[sq]);
+
+                            }, function()
+                            {
+
+                                // Continue sliding
+                                plugin.slideQueryStart(sq);
+
+                            });
+
+                        }
+
                     }
 
                 });
+
             },
+
+            slideQueryStart: function(index)
+            {
+
+                // Start sliding
+                interval[index] = setInterval(function()
+                {
+                    plugin.slideQuerySwitch(index);
+                },
+                opts.delay);
+
+            },
+
             slideQuerySwitch: function(index)
             {
+
+                // Set new slide index
                 idx[index] = idx[index] == (count[index] - 1) ? 0 : idx[index] + 1;
-                items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item').stop().animate({ opacity: 0 }, opts.speedOut, opts.easing).hide(function(){
+
+                // Switch to slide pointed as index argument
+                items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item').stop().animate({ opacity: 0 }, opts.speedOut, opts.easing).hide(function()
+                {
                     items[index].eq(idx[index]).addClass('slide-query-active-item').stop().animate({ opacity: 1.0 }).show();
                 });
+
             }
+
         };
 
     $.fn.extend(plugin);
