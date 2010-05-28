@@ -66,8 +66,15 @@
                     idx[sq] = opts.startIndex,
                     interval[sq] = null;
 
+                    // Check if less than 1 slide exists
+                    if (count[sq] <= 1)
+                    {
+                        // Do not animate if there are no slides
+                        return;
+                    }
+
                     // Check if delay is not set and set it to slides number * 1000 defaultly 
-                    delay[sq] = opts.delay == null ? count[sq] * 1000 : opts.delay;
+                    delay[sq] = opts.delay === null ? count[sq] * 1000 : opts.delay;
 
                     // Hide all slides
                     items[sq].hide();
@@ -75,25 +82,21 @@
                     // Show a index slide with animation
                     items[sq].eq(idx[sq]).addClass('slide-query-active-item').fadeToggle(opts.speedIn);
 
-                    // Check if more than 1 slide exists
-                    if (count[sq] > 1)
-                    {
-                        // Start automatic sliding
-                        plugin.start(sq);
+                    // Start automatic sliding
+                    plugin.start(sq);
 
-                        // Check if stopping on mouse over is available
-                        if (opts.mouseOverStop)
+                    // Check if stopping on mouse over is available
+                    if (opts.mouseOverStop)
+                    {
+                        // Stop slideshow on mouse enter and continue on leave
+                        me[sq].hover(function(){
+                            // Stop sliding
+                            clearInterval(interval[sq]);
+                        },function()
                         {
-                            // Stop slideshow on mouse enter and continue on leave
-                            me[sq].hover(function(){
-                                // Stop sliding
-                                clearInterval(interval[sq]);
-                            },function()
-                            {
-                                // Continue sliding
-                                plugin.start(sq);
-                            });
-                        }
+                            // Continue sliding
+                            plugin.start(sq);
+                        });
                     }
                 });
             },
