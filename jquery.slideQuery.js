@@ -1,5 +1,5 @@
 /*
- * slideQuery 1.1.1
+ * slideQuery 1.2
  * Slideshow plugin for jQuery
  *
  * Copyright (c) 2010 Otar Chekurishvili
@@ -31,6 +31,7 @@
     var defaults =
         {
             slides: null,
+            type: 'fade',
             speed: 'normal',
             delay: null,
             mouseOverStop: true,
@@ -79,7 +80,7 @@
                     items[sq].hide();
 
                     // Show a index slide with animation
-                    items[sq].eq(idx[sq]).addClass('slide-query-active-item').fadeToggle(opts.speedIn);
+                    items[sq].eq(idx[sq]).addClass('slide-query-active-item').slideQueryAnimate(opts.speedIn);
 
                     // Start automatic sliding
                     plugin.start(sq);
@@ -111,18 +112,30 @@
                 idx[index] = idx[index] == (count[index] - 1) ? 0 : idx[index] + 1;
 
                 // Switch to newly indexed slide
-                items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item').fadeToggle(opts.speedOut, function(){
-                    items[index].eq(idx[index]).addClass('slide-query-active-item').fadeToggle(opts.speedIn);
+                items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item').slideQueryAnimate(opts.speedOut, function(){
+                    items[index].eq(idx[index]).addClass('slide-query-active-item').slideQueryAnimate(opts.speedIn);
                 });
             }
         };
 
     $.fn.extend({
-        slideQuery: function(options) {
+        slideQuery: function(options)
+        {
             plugin.initialize(this, options);
         },
-        fadeToggle: function(speed, easing, callback) {
-            return this.animate({opacity: 'toggle'}, speed, easing, callback);
+        slideQueryAnimate: function(speed, callback)
+        {
+            switch (opts.type)
+            {
+                default:
+                case 'none': return this.toggle(0, callback);
+                case 'fade': return this.fadeToggle(speed, callback);
+                case 'slide': return this.slideToggle(speed, callback);
+            }
+        },
+        fadeToggle: function(speed, callback)
+        {
+            return this.animate({opacity: 'toggle'}, speed, callback);
         }
     });
 

@@ -1,6 +1,6 @@
-slideQuery 1.1
+slideQuery 1.2
 ==============
 
-slideQuery is a easy to use and customizable plugin of [jQuery](http://www.jquery.com. "jQuery Website") for creating pretty slideshows.
+slideQuery is an easy to use and customizable slideshow plugin for [jQuery](http://www.jquery.com. "jQuery Website") JavaScript library.
 
 Documentation coming soon.
