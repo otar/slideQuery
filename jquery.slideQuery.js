@@ -31,13 +31,12 @@
     var defaults =
         {
             slides: 'li',
-            speed: 'slow',
+            speed: 'normal',
             delay: null,
             mouseOverStop: true,
             speedIn: null,
             speedOut: null,
-            startIndex: 0,
-            easing: 'swing'
+            startIndex: 0
         },
         opts = {},
         me = [],
@@ -70,11 +69,11 @@
                     // Check if delay is set and set it to slides number * 1000 defaultly 
                     delay[sq] = opts.delay == null ? count[sq] * 1000 : opts.delay;
 
-                    // Hide all slides and set opacity to 0
-                    items[sq].hide().css('opacity', 0);
+                    // Hide all slides
+                    items[sq].hide();
 
                     // Show a index slide with animation
-                    items[sq].eq(idx[sq]).addClass('slide-query-active-item').stop().animate({opacity: 1.0}, opts.speedIn, opts.easing).show();
+                    items[sq].eq(idx[sq]).addClass('slide-query-active-item').fadeIn(opts.speedIn);
 
                     // Check if more than 1 slide exists
                     if (count[sq] > 1)
@@ -111,9 +110,9 @@
                 idx[index] = idx[index] == (count[index] - 1) ? 0 : idx[index] + 1;
 
                 // Switch to newly indexed slide
-                items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item').stop().animate({ opacity: 0 }, opts.speedOut, opts.easing).hide(function()
+                items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item').fadeOut(opts.speedOut, function()
                 {
-                    items[index].eq(idx[index]).addClass('slide-query-active-item').stop().animate({ opacity: 1.0 }).show();
+                    items[index].eq(idx[index]).addClass('slide-query-active-item').fadeIn(opts.speedIn);
                 });
             }
         };
