@@ -42,7 +42,11 @@ function debug(data)
           easing: 'swing',
         },
         opts = {},
-        idx = 0;
+        me = [],
+        items = [],
+        count = [],
+        idx = [],
+        interval = [];
 
     $.fn.slideQuery = function(options)
     {
@@ -50,31 +54,28 @@ function debug(data)
         opts = $.extend({}, defaults, options);
 
         // Chain method and call plugin function
-        return this.each(function(ss){
+        return this.each(function(sq) {
 
             // Declare essential variables
-            var me = $(this),
-                items = $(opts.slides, me),
-                count = items.length,
-                interval = null;
-
-            // Set slide counter index
-            idx = opts.startIndex;
-
+            me[sq] = $(this),
+            items[sq] = $(opts.slides, me[sq]),
+            count[sq] = items[sq].length,
+            idx[sq] = opts.startIndex,
+            interval[sq] = null;
 
             // Hide all slides and set opacity to 0
-            items.hide().css('opacity', 0);
+            items[sq].hide().css('opacity', 0);
 
             // Show a index slide with animation
-            items.eq(idx).addClass('slide-query-active-item').stop().animate({opacity: 1.0}, opts.speedIn, opts.easing).show();
+            items[sq].eq(idx[sq]).addClass('slide-query-active-item').stop().animate({opacity: 1.0}, opts.speedIn, opts.easing).show();
 
             // Start automatic sliding if more than 1 slide exists
-            if (count > 1)
+            if (count[sq] > 1)
             {
-                interval = setInterval(function(){
-                    idx = (idx == (count - 1)) ? 0 : idx + 1;
-                    items.filter('.slide-query-active-item').removeClass('slide-query-active-item').stop().animate({ opacity: 0 }, opts.speedOut, opts.easing).hide(function(){
-                        items.eq(idx).addClass('slide-query-active-item').stop().animate({ opacity: 1.0 }).show();
+                interval[sq] = setInterval(function(){
+                    idx[sq] = idx[sq] == (count[sq] - 1) ? 0 : idx[sq] + 1;
+                    items[sq].filter('.slide-query-active-item').removeClass('slide-query-active-item').stop().animate({ opacity: 0 }, opts.speedOut, opts.easing).hide(function(){
+                        items[sq].eq(idx[sq]).addClass('slide-query-active-item').stop().animate({ opacity: 1.0 }).show();
                     });
                 }, opts.delay);
             }

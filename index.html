@@ -6,14 +6,14 @@
     <style type="text/css">
 
         /* Style slideshow as you wish */
-        #my-slideshow { width: 320px; height: 240px; border: 1px solid maroon }
-        #my-slideshow li { list-style: none }
+        .my-slideshow { width: 320px; height: 240px; border: 1px solid maroon }
+        .my-slideshow li { list-style: none }
 
     </style>
 </head>
 <body>
 
-    <ul id="my-slideshow">
+    <ul class="my-slideshow">
         <li>
             This is your first slide<br />
             <b>You must put slide content here, whatever it is: image, plain text or media...</b>
@@ -23,13 +23,26 @@
         <li>This is your fourth slide</li>
     </ul>
 
+    <ul class="my-slideshow">
+        <li>
+            This is your first slide<br />
+            <b>You must put slide content here, whatever it is: image, plain text or media...</b>
+        </li>
+        <li>This is your second slide</li>
+    </ul>
+
+    <ul class="my-slideshow">
+        <li>This is your second slide</li>
+        <li>This is your third slide</li>
+    </ul>
+
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="jquery.slideQuery.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
 
             // Initialize slideshow plugin
-            $('#my-slideshow').slideQuery();
+            $('.my-slideshow').slideQuery();
 
             /* Default Options
 
@@ -39,12 +52,7 @@
                   speedOut: 'slow',
                   delay: 3000,
                   startIndex: 0,
-                  easing: 'swing',
-                  events: {
-                      init: null,
-                      index: null,
-                      start: null
-                  }
+                  easing: 'swing'
                 });
 
             */
