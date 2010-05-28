@@ -40,52 +40,59 @@ function debug(data)
           speedOut: null,
           delay: 5000,
           startIndex: 0,
-          easing: 'swing',
+          easing: 'swing'
         },
         opts = {},
         me = [],
         items = [],
         count = [],
         idx = [],
-        interval = [];
-
-    $.fn.slideQuery = function(options)
-    {
-        // Combine user passed options with defaults
-        opts = $.extend({}, defaults, options);
-
-        // Set slide show and hide event speed depended on "speed" option
-        opts.speedIn = opts.speedIn || opts.speed;
-        opts.speedOut = opts.speedOut || opts.speed;
-
-        // Chain method and call plugin function
-        return this.each(function(sq) {
-
-            // Declare essential variables
-            me[sq] = $(this),
-            items[sq] = $(opts.slides, me[sq]),
-            count[sq] = items[sq].length,
-            idx[sq] = opts.startIndex,
-            interval[sq] = null;
-
-            // Hide all slides and set opacity to 0
-            items[sq].hide().css('opacity', 0);
-
-            // Show a index slide with animation
-            items[sq].eq(idx[sq]).addClass('slide-query-active-item').stop().animate({opacity: 1.0}, opts.speedIn, opts.easing).show();
-
-            // Start automatic sliding if more than 1 slide exists
-            if (count[sq] > 1)
+        interval = [],
+        plugin = {
+            slideQuery: function(options)
             {
-                interval[sq] = setInterval(function(){
-                    idx[sq] = idx[sq] == (count[sq] - 1) ? 0 : idx[sq] + 1;
-                    items[sq].filter('.slide-query-active-item').removeClass('slide-query-active-item').stop().animate({ opacity: 0 }, opts.speedOut, opts.easing).hide(function(){
-                        items[sq].eq(idx[sq]).addClass('slide-query-active-item').stop().animate({ opacity: 1.0 }).show();
-                    });
-                }, opts.delay);
-            }
+                // Combine user passed options with defaults
+                opts = $.extend({}, defaults, options);
 
-        });
-    }
+                // Set slide show and hide event speed depended on "speed" option
+                opts.speedIn = opts.speedIn || opts.speed;
+                opts.speedOut = opts.speedOut || opts.speed;
+
+                // Chain method and call plugin function
+                return this.each(function(sq) {
+
+                    // Declare essential variables
+                    me[sq] = $(this),
+                    items[sq] = $(opts.slides, me[sq]),
+                    count[sq] = items[sq].length,
+                    idx[sq] = opts.startIndex,
+                    interval[sq] = null;
+
+                    // Hide all slides and set opacity to 0
+                    items[sq].hide().css('opacity', 0);
+
+                    // Show a index slide with animation
+                    items[sq].eq(idx[sq]).addClass('slide-query-active-item').stop().animate({opacity: 1.0}, opts.speedIn, opts.easing).show();
+
+                    // Start automatic sliding if more than 1 slide exists
+                    if (count[sq] > 1)
+                    {
+                        interval[sq] = setInterval(function(){
+                            plugin.slideQuerySwitch(sq);
+                        }, opts.delay);
+                    }
+
+                });
+            },
+            slideQuerySwitch: function(index)
+            {
+                idx[index] = idx[index] == (count[index] - 1) ? 0 : idx[index] + 1;
+                items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item').stop().animate({ opacity: 0 }, opts.speedOut, opts.easing).hide(function(){
+                    items[index].eq(idx[index]).addClass('slide-query-active-item').stop().animate({ opacity: 1.0 }).show();
+                });
+            }
+        };
+
+    $.fn.extend(plugin);
 
 })(jQuery);
