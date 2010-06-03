@@ -32,9 +32,10 @@
     {
         slides: null,
         type: 'fade',
-        speed: 'normal',
+        speed: 'slow',
         delay: null,
         mouseOverStop: true,
+        mouseOutInstantStart: true,
         speedIn: null,
         speedOut: null,
         startIndex: 0
@@ -103,10 +104,18 @@
                 if (opts.mouseOverStop)
                 {
                     // Stop slideshow on mouse enter and continue on leave
-                    me[index].hover(function(){
+                    me[index].hover(function()
+                    {
                         // Stop sliding
                         clearInterval(interval[index]);
-                    }, function() {
+                    }, function()
+                    {
+                        // Check if animation must continue instantly
+                        if (opts.mouseOutInstantStart) {
+                            // Change slide instantly
+                            plugin.change(index);
+                        }
+
                         // Continue sliding
                         plugin.start(index);
                     });
@@ -139,7 +148,17 @@
                 case 'fade':
                     return element.animate({
                         opacity: 'toggle'
-                    }, speed, callback);
+                    }, speed, function(){
+                        // Callback hack
+                        if ($.isFunction(callback)) {
+                            callback.call(element);
+                        }
+
+                        // Fix IE oppacity fiilter issue with jQuery
+                        if (element[0].style.removeAttribute) {
+                            element[0].style.removeAttribute('filter');
+                        }
+                    });
                 case 'slide':
                     return element.slideToggle(speed, callback);
             }

@@ -46,14 +46,15 @@
                 // Initialize slideshow plugin with default options
                 // Alternatively you can simply call $('...').slideQuery();
                 $('.my-slideshow').slideQuery({
-                    slides:      null,      // Selector for slide elements, must be a children of '.my-slideshow' class in this case.
-                    type:        'fade',    // Animation type. 'fade', 'slide' and 'none' are supported.
-                    speed:       'normal',  // Animation speed. 'normal', 'fast', 'slow' or miliseconds, ignored if animation type is 'none'.
-                    delay:       null,      // Delay between switching slides in miliseconds.
-                    stopOnOver:  true,      // Stop slideshow on mouse over and continue on mouse out.
-                    speedIn:     null,      // Slide show speed, if not set 'speed' option value is used. ignored if animation type is 'none'.
-                    speedOut:    null,      // Slide hide speed, if not set 'speed' option value is used. ignored if animation type is 'none'.
-                    startIndex:  0          // Starting index/point of slide, be careful with using for multimple slideshows under one selector.
+                    slides: null, // Selector for slide elements, must be a children of '.my-slideshow' class in this case.
+                    type: 'fade', // Animation type. 'fade', 'slide' and 'none' are supported.
+                    speed: 'slow', // Animation speed. 'normal', 'fast', 'slow' or miliseconds, ignored if animation type is 'none'.
+                    delay: null, // Delay between switching slides in miliseconds.
+                    stopOnOver: true, // Stop slideshow on mouse over and continue on mouse out.
+                    mouseOutInstantStart: true, // Continue sliding after mouse out instantly, without delay. Note, stopOnOver option should be set to true.
+                    speedIn: null, // Slide show speed, if not set 'speed' option value is used. Ignored if animation type is 'none'.
+                    speedOut: null, // Slide hide speed, if not set 'speed' option value is used. Ignored if animation type is 'none'.
+                    startIndex: 0 // Starting index/point of slide, be careful with using for multimple slideshows under one selector.
                 });
 
             });
