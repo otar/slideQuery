@@ -29,113 +29,114 @@
 
     // Declare default options and variables
     var defaults =
+    {
+        slides: null,
+        type: 'fade',
+        speed: 'normal',
+        delay: null,
+        mouseOverStop: true,
+        speedIn: null,
+        speedOut: null,
+        startIndex: 0
+    },
+    opts = {},
+    me = [],
+    items = [],
+    count = [],
+    idx = [],
+    interval = [],
+    delay = [],
+    plugin =
+    {
+        initialize: function(object, options)
         {
-            slides: null,
-            type: 'fade',
-            speed: 'normal',
-            delay: null,
-            mouseOverStop: true,
-            speedIn: null,
-            speedOut: null,
-            startIndex: 0
-        },
-        opts = {},
-        me = [],
-        items = [],
-        count = [],
-        idx = [],
-        interval = [],
-        delay = [],
-        plugin =
-        {
-            initialize: function(object, options)
+            // Combine user set options with defaults is arguments passed
+            opts = options ? $.extend({}, defaults, options) : defaults;
+
+            // Set slide show and hide event speed depended on "speed" option
+            opts.speedIn = opts.speedIn || opts.speed;
+            opts.speedOut = opts.speedOut || opts.speed;
+
+            // Chain method and call plugin function
+            return object.each(function(index)
             {
-                // Combine user set options with defaults is arguments passed
-                opts = options ? $.extend({}, defaults, options) : defaults;
+                // Declare essential variables
+                me[index] = $(this),
+                items[index] = me[index].children(opts.slides),
+                count[index] = items[index].length,
+                idx[index] = opts.startIndex,
+                interval[index] = null;
 
-                // Set slide show and hide event speed depended on "speed" option
-                opts.speedIn = opts.speedIn || opts.speed;
-                opts.speedOut = opts.speedOut || opts.speed;
+                // Check if less than 1 slide exists
+                if (count[index] <= 1) {
+                    // Do not animate if there are no slides
+                    return;
+                }
 
-                // Chain method and call plugin function
-                return object.each(function(sq)
+                // Check if delay is not set and set it to slides number * 1000 defaultly
+                delay[index] = opts.delay === null ? count[index] * 1000 : opts.delay;
+
+                // Hide all slides
+                items[index].hide();
+
+                // Show a index slide with animation
+                //items[index].eq(idx[index]).addClass('slide-query-active-item').slideQueryAnimate(opts.speedIn);
+                plugin.animation(items[index].eq(idx[index]).addClass('slide-query-active-item') , opts.speedIn);
+
+                // Start automatic sliding
+                plugin.start(index);
+
+                // Check if stopping on mouse over is available
+                if (opts.mouseOverStop)
                 {
-                    // Declare essential variables
-                    me[sq] = $(this),
-                    items[sq] = me[sq].children(opts.slides),
-                    count[sq] = items[sq].length,
-                    idx[sq] = opts.startIndex,
-                    interval[sq] = null;
+                    // Stop slideshow on mouse enter and continue on leave
+                    me[index].hover(function(){
+                        // Stop sliding
+                        clearInterval(interval[index]);
+                    }, function() {
+                        // Continue sliding
+                        plugin.start(index);
+                    });
+                }
+            });
+        },
+        start: function(index)
+        {
+            // Start sliding
+            interval[index] = setInterval(function(){
+                plugin.change(index);
+            }, delay[index]);
+        },
+        change: function(index)
+        {
+            // Set new slide index
+            idx[index] = idx[index] == (count[index] - 1) ? 0 : idx[index] + 1;
 
-                    // Check if less than 1 slide exists
-                    if (count[sq] <= 1) {
-                        // Do not animate if there are no slides
-                        return;
-                    }
-
-                    // Check if delay is not set and set it to slides number * 1000 defaultly 
-                    delay[sq] = opts.delay === null ? count[sq] * 1000 : opts.delay;
-
-                    // Hide all slides
-                    items[sq].hide();
-
-                    // Show a index slide with animation
-                    items[sq].eq(idx[sq]).addClass('slide-query-active-item').slideQueryAnimate(opts.speedIn);
-
-                    // Start automatic sliding
-                    plugin.start(sq);
-
-                    // Check if stopping on mouse over is available
-                    if (opts.mouseOverStop)
-                    {
-                        // Stop slideshow on mouse enter and continue on leave
-                        me[sq].hover(function(){
-                            // Stop sliding
-                            clearInterval(interval[sq]);
-                        }, function() {
-                            // Continue sliding
-                            plugin.start(sq);
-                        });
-                    }
-                });
-            },
-            start: function(index)
+            // Switch to newly indexed slide
+            plugin.animation(items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item'), opts.speedOut);
+            plugin.animation(items[index].eq(idx[index]).addClass('slide-query-active-item'), opts.speedIn);
+        },
+        animation: function(element, speed, callback)
+        {
+            switch (opts.type)
             {
-                // Start sliding
-                interval[index] = setInterval(function(){
-                    plugin.change(index);
-                }, delay[index]);
-            },
-            change: function(index)
-            {
-                // Set new slide index
-                idx[index] = idx[index] == (count[index] - 1) ? 0 : idx[index] + 1;
-
-                // Switch to newly indexed slide
-                items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item').slideQueryAnimate(opts.speedOut, function(){
-                    items[index].eq(idx[index]).addClass('slide-query-active-item').slideQueryAnimate(opts.speedIn);
-                });
+                default:
+                case 'none':
+                    return element.toggle(0, callback);
+                case 'fade':
+                    return element.animate({
+                        opacity: 'toggle'
+                    }, speed, callback);
+                case 'slide':
+                    return element.slideToggle(speed, callback);
             }
-        };
+        }
+    };
 
     $.fn.extend({
         slideQuery: function(options)
         {
             plugin.initialize(this, options);
-        },
-        slideQueryAnimate: function(speed, callback)
-        {
-            switch (opts.type)
-            {
-                default:
-                case 'none': return this.toggle(0, callback);
-                case 'fade': return this.fadeToggle(speed, callback);
-                case 'slide': return this.slideToggle(speed, callback);
-            }
-        },
-        fadeToggle: function(speed, callback)
-        {
-            return this.animate({opacity: 'toggle'}, speed, callback);
         }
     });
 
