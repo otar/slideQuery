@@ -76,6 +76,19 @@
                 // Check if delay is not set and set it to slides number * 1000 defaultly
                 delay[index] = opts.delay === null ? count[index] * 1000 : opts.delay;
 
+                // Make slideshow container relatively positioned
+                me[index].css('position', 'relative');
+
+                // Set CSS attributes to slides
+                items[index].each(function(indexZeta){
+                    $(this).css({
+                        position: 'absolute',
+                        top: 'auto',
+                        left: 'auto',
+                        zIndex: String((count[index] * 10) - (indexZeta * 10))
+                    });
+                });
+
                 // Hide all slides
                 items[index].hide();
 
