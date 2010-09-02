@@ -51,11 +51,24 @@
                     speed: 'slow', // Animation speed. 'normal', 'fast', 'slow' or miliseconds, ignored if animation type is 'none'.
                     delay: null, // Delay between switching slides in miliseconds.
                     direction: 'right', // Direction of the slideshow, 'right' and 'left' options are supported.
+                    switcher: true, // Display slide switcher
+                    switcherTextLeft: '<<', // Left slide switcher markup. For example '<span style="cursor: pointer">Previous</span>'
+                    switcherStyleLeft: {
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0
+                    }, // CSS style for left slide switcher container. Note, slideshow container has a relative property.
+                    switcherTextRight: '>>', // Right slide switcher markup. For example '<span style="cursor: pointer">Next</span>'
+                    switcherStyleRight: {
+                        position: 'absolute',
+                        bottom: 0,
+                        right: 0
+                    }, // CSS style for right slide switcher container. Note, slideshow container has a relative property.
                     stopOnOver: true, // Stop slideshow on mouse over and continue on mouse out.
-                    mouseOutInstantStart: true, // Continue sliding after mouse out instantly, without delay. Note, stopOnOver option should be set to true.
+                    mouseOutInstantStart: false, // Continue sliding after mouse out instantly, without delay. Note, stopOnOver option should be set to true.
                     speedIn: null, // Slide show speed, if not set 'speed' option value is used. Ignored if animation type is 'none'.
                     speedOut: null, // Slide hide speed, if not set 'speed' option value is used. Ignored if animation type is 'none'.
-                    startIndex: 0 // Starting index/point of slide, be careful with using for multimple slideshows under one selector.
+                    startIndex: 1 // Starting index/point of slide, be careful with using for multimple slideshows under one selector.
                 });
 
             });
