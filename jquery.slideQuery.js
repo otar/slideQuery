@@ -34,6 +34,7 @@
         type: 'fade',
         speed: 'slow',
         delay: null,
+        direction: 'right',
         mouseOverStop: true,
         mouseOutInstantStart: true,
         speedIn: null,
@@ -131,8 +132,19 @@
         },
         change: function(index)
         {
-            // Set new slide index
-            idx[index] = idx[index] == (count[index] - 1) ? 0 : idx[index] + 1;
+            // Check direction option
+            switch (opts.direction)
+            {
+                default:
+                case 'right':
+                    // Set new slide index to the next one
+                    idx[index] = idx[index] == (count[index] - 1) ? 0 : idx[index] + 1;
+                    break;
+                case 'left':
+                    // Set new slide index to the previous one
+                    idx[index] = idx[index] == 0 ? (count[index] - 1) : idx[index] - 1;
+                    break;
+            }
 
             // Switch to newly indexed slide
             plugin.animation(items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item'), opts.speedOut);
