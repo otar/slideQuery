@@ -59,6 +59,7 @@
     items = [],
     count = [],
     idx = [],
+    lastIdx = [],
     interval = [],
     delay = [],
     plugin =
@@ -101,6 +102,9 @@
                         idx[index] = Math.floor(Math.random() * count[index]);
                         break;
                 }
+
+                // Assign starting index to the last index variable
+                lastIdx[index] = idx[index];
 
                 // Check if less than 1 slide exists
                 if (count[index] <= 1)
@@ -212,10 +216,23 @@
                     idx[index] = idx[index] == 0 ? lastSlide : idx[index] - 1;
                     break;
                 case 'random':
+                    // Random the slide index
+                    var random = Math.floor(Math.random() * count[index]);
+
+                    // Check if random slide index is matching the latest one
+                    if (lastIdx[index] == random)
+                    {
+                        // Regenerate random slide index
+                        return plugin.change(index, 'random');
+                    }
+
                     // Set new slide index to the random one
-                    idx[index] = Math.floor(Math.random() * count[index]);
+                    idx[index] = random;
                     break;
             }
+
+            // Set last slide index to the recently generated one
+            lastIdx[index] = idx[index];
 
             // Switch to newly indexed slide
             plugin.animation(items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item'), opts.speedOut);

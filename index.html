@@ -7,10 +7,9 @@
         <style type="text/css">
 
             /*
-                    Style slideshow as you wish but do not forget to declare
-                height attribute for the main slideshow element.
-                    Setting height to element childs/slides manually may work
-                too, but haven't tested.
+                Style slideshow as you wish but do not forget to declare
+                height attribute for the main slideshow container. Fixed
+                width and height for the slideshow container is recommended.`
             */
             .my-slideshow { width: 320px; height: 140px; border: 1px solid maroon }
             .my-slideshow li { list-style: none }
@@ -44,7 +43,7 @@
             $(document).ready(function(){
 
                 // Initialize slideshow plugin with default options
-                // Alternatively you can simply call $('...').slideQuery();
+                // Alternatively you can call $('...').slideQuery(); with default options
                 $('.my-slideshow').slideQuery({
                     slides: null, // Selector for slide elements, must be a children of '.my-slideshow' class in this case.
                     type: 'fade', // Animation type. 'fade', 'slide' and 'none' are supported.
@@ -68,7 +67,7 @@
                     mouseOutInstantStart: false, // Continue sliding after mouse out instantly, without delay. Note, stopOnOver option should be set to true.
                     speedIn: null, // Slide show speed, if not set 'speed' option value is used. Ignored if animation type is 'none'.
                     speedOut: null, // Slide hide speed, if not set 'speed' option value is used. Ignored if animation type is 'none'.
-                    startIndex: 0 // Starting index/point of slide, be careful with using for multimple slideshows under one selector.
+                    startIndex: 'first' // Starting index/point of the slide. Can be 'first', 'last', 'random' or a index number.
                 });
 
             });
