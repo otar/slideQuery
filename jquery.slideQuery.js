@@ -52,7 +52,7 @@
         mouseOutInstantStart: false,
         speedIn: null,
         speedOut: null,
-        startIndex: 0
+        startIndex: 'first'
     },
     opts = {},
     me = [],
@@ -80,6 +80,27 @@
                 items[index] = me[index].children(opts.slides),
                 count[index] = items[index].length,
                 interval[index] = null;
+
+                // Set starting slide index
+                switch (opts.startIndex)
+                {
+                    default:
+                        // Set starting index to the passed number
+                        idx[index] = opts.startIndex;
+                        break;
+                    case 'first':
+                        // Set starting index to the first slide
+                        idx[index] = 0;
+                        break;
+                    case 'last':
+                        // Set starting index to the last slide
+                        idx[index] = count[index] - 1;
+                        break;
+                    case 'random':
+                        // Set starting index to the random slide
+                        idx[index] = Math.floor(Math.random() * count[index]);
+                        break;
+                }
 
                 // Check if less than 1 slide exists
                 if (count[index] <= 1)
