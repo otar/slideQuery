@@ -79,7 +79,6 @@
                 me[index] = $(this),
                 items[index] = me[index].children(opts.slides),
                 count[index] = items[index].length,
-                idx[index] = opts.startIndex,
                 interval[index] = null;
 
                 // Check if less than 1 slide exists
@@ -115,8 +114,8 @@
 
                     // Set the most top zIndex to the switchers
                     var zIndexTop = (count[index] + 1) * 10;
-                    $.extend(opts.switcherStyleLeft, { zIndex: zIndexTop });
-                    $.extend(opts.switcherStyleRight, { zIndex: zIndexTop });
+                    $.extend(opts.switcherStyleLeft, {zIndex: zIndexTop});
+                    $.extend(opts.switcherStyleRight, {zIndex: zIndexTop});
 
                     // Customize left switcher
                     $('.slide-query-switcher-left', me[index]).css(opts.switcherStyleLeft).bind('click', function()
@@ -191,6 +190,10 @@
                     // Set new slide index to the previous one
                     idx[index] = idx[index] == 0 ? lastSlide : idx[index] - 1;
                     break;
+                case 'random':
+                    // Set new slide index to the random one
+                    idx[index] = Math.floor(Math.random() * count[index]);
+                    break;
             }
 
             // Switch to newly indexed slide
@@ -233,7 +236,7 @@
         }
     };
 
-    // Add plugin to jQuery core
+    // Add plugin to the jQuery core
     $.fn.extend({
         slideQuery: function(options)
         {
