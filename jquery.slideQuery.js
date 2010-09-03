@@ -1,5 +1,5 @@
 /*
- * slideQuery 1.2
+ * slideQuery 1.3
  * Slideshow plugin for jQuery
  *
  * Copyright (c) 2010 Otar Chekurishvili
@@ -96,22 +96,27 @@
                 me[index].css('position', 'relative');
 
                 // Set CSS attributes to slides
-                items[index].each(function(indexZeta)
+                items[index].each(function(slideIndex)
                 {
                     // Assign CSS properties to the current slide
                     $(this).css({
                         position: 'absolute',
                         top: 'auto',
                         left: 'auto',
-                        zIndex: (count[index] * 10) - (indexZeta * 10)
+                        zIndex: (count[index] * 10) - (slideIndex * 10)
                     });
                 });
 
                 // Check if slideshow must have switcher
                 if (opts.switcher)
                 {
-                    // Wrap slideshow in a container, assign 'relative' value to CSS position property and append slide switcher container to it
-                    me[index].css('position', 'relative').append('<div class="slide-query-switcher"><div class="slide-query-switcher-left">' + String(opts.switcherTextLeft) + '</div><div class="slide-query-switcher-right">' + String(opts.switcherTextRight) + '</div></div>');
+                    // Wrap slideshow in a container and append slide switcher container to it
+                    me[index].append('<div class="slide-query-switcher"><div class="slide-query-switcher-left">' + String(opts.switcherTextLeft) + '</div><div class="slide-query-switcher-right">' + String(opts.switcherTextRight) + '</div></div>');
+
+                    // Set the most top zIndex to the switchers
+                    var zIndexTop = (count[index] + 1) * 10;
+                    $.extend(opts.switcherStyleLeft, { zIndex: zIndexTop });
+                    $.extend(opts.switcherStyleRight, { zIndex: zIndexTop });
 
                     // Customize left switcher
                     $('.slide-query-switcher-left', me[index]).css(opts.switcherStyleLeft).bind('click', function()
@@ -172,7 +177,7 @@
         change: function(index, direction)
         {
             // Count number of slides starting with zero-index
-            var lastSlide = (count[index] - 1);
+            var lastSlide = count[index] - 1;
 
             // Detect direction
             switch (direction)
