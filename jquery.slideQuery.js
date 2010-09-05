@@ -37,17 +37,7 @@
         direction: 'right',
         switcher: true,
         switcherTextLeft: '<<',
-        switcherStyleLeft: {
-            position: 'absolute',
-            bottom: 0,
-            left: 0
-        },
         switcherTextRight: '>>',
-        switcherStyleRight: {
-            position: 'absolute',
-            bottom: 0,
-            right: 0
-        },
         mouseOverStop: true,
         mouseOutInstantStart: false,
         speedIn: null,
@@ -86,6 +76,15 @@
                 switch (opts.startIndex)
                 {
                     default:
+
+                        // Check if passed option is a number
+                        if (opts.startIndex.toString().search(/^-?[0-9]+$/) != 0)
+                        {
+                            // Set starting index to the first slide
+                            idx[index] = 0;
+                            break;
+                        }
+
                         // Set starting index to the passed number
                         idx[index] = opts.startIndex;
                         break;
@@ -135,22 +134,34 @@
                 if (opts.switcher)
                 {
                     // Wrap slideshow in a container and append slide switcher container to it
-                    me[index].append('<div class="slide-query-switcher"><div class="slide-query-switcher-left">' + String(opts.switcherTextLeft) + '</div><div class="slide-query-switcher-right">' + String(opts.switcherTextRight) + '</div></div>');
+                    me[index].append('<div class="slide-query-switcher"><div class="slide-query-switcher-left"></div><div class="slide-query-switcher-right"></div></div>');
 
                     // Set the most top zIndex to the switchers
                     var zIndexTop = (count[index] + 1) * 10;
-                    $.extend(opts.switcherStyleLeft, {zIndex: zIndexTop});
-                    $.extend(opts.switcherStyleRight, {zIndex: zIndexTop});
+                    $.extend(opts.switcherStyleLeft, {
+                        zIndex: zIndexTop
+                    });
+                    $.extend(opts.switcherStyleRight, {
+                        zIndex: zIndexTop
+                    });
 
                     // Customize left switcher
-                    $('.slide-query-switcher-left', me[index]).css(opts.switcherStyleLeft).bind('click', function()
+                    $('.slide-query-switcher-left', me[index]).html(opts.switcherTextLeft).css({
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0
+                    }).bind('click', function()
                     {
                         // Switch slide to the previous one
                         plugin.change(index, 'left');
                     });
 
                     // Customize right switcher
-                    $('.slide-query-switcher-right', me[index]).css(opts.switcherStyleRight).bind('click', function()
+                    $('.slide-query-switcher-right', me[index]).html(opts.switcherTextRight).css({
+                        position: 'absolute',
+                        bottom: 0,
+                        right: 0
+                    }).bind('click', function()
                     {
                         // Switch slide to the next one
                         plugin.change(index, 'right');
