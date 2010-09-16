@@ -11,29 +11,20 @@
                 height attribute for the main slideshow container. Fixed
                 width and height for the slideshow container is recommended.`
             */
-            .my-slideshow { width: 320px; height: 140px; border: 1px solid maroon }
-            .my-slideshow li { list-style: none }
+            .my-slideshow { margin: 0; padding: 0; width: 320px; height: 140px; border: 1px solid maroon }
+            .my-slideshow li { margin: 0; padding: 0; left: 0; top: 0; list-style: none; width: 320px; height: 140px; }
+            .slide-query-switcher-left, .slide-query-switcher-right { cursor: pointer }
+            .slide-query-switcher-left:hover, .slide-query-switcher-right:hover { text-decoration: underline }
 
         </style>
     </head>
     <body>
 
         <ul class="my-slideshow">
-            <li><b>Slideshow 1:</b> first slide <b>(1/4)</b></li>
-            <li><b>Slideshow 1:</b> second slide <b>(2/4)</b></li>
-            <li><b>Slideshow 1:</b> third slide <b>(3/4)</b></li>
-            <li><b>Slideshow 1:</b> fourth slide <b>(4/4)</b></li>
-        </ul>
-
-        <ul class="my-slideshow">
-            <li><b>Slideshow 2:</b> first slide <b>(1/2)</b></li>
-            <li><b>Slideshow 2:</b> second slide <b>(2/2)</b></li>
-        </ul>
-
-        <ul class="my-slideshow">
-            <li><b>Slideshow 3:</b> first slide <b>(1/3)</b></li>
-            <li><b>Slideshow 3:</b> second slide <b>(2/3)</b></li>
-            <li><b>Slideshow 3:</b> third slide <b>(3/3)</b></li>
+            <li style="background: brown"><b>Slideshow 1:</b> first slide <b>(1/4)</b></li>
+            <li style="background: burlywood"><b>Slideshow 1:</b> second slide <b>(2/4)</b></li>
+            <li style="background: cadetblue"><b>Slideshow 1:</b> third slide <b>(3/4)</b></li>
+            <li style="background: coral"><b>Slideshow 1:</b> fourth slide <b>(4/4)</b></li>
         </ul>
 
         <script type="text/javascript" src="jquery.js"></script>
@@ -46,7 +37,7 @@
                 // Alternatively you can call $('...').slideQuery(); with default options
                 $('.my-slideshow').slideQuery({
                     slides: null, // Selector for slide elements, must be a children of '.my-slideshow' class in this case.
-                    type: 'fade', // Animation type. 'fade', 'slide' and 'none' are supported.
+                    type: 'swap', // Animation type. 'fade', 'slide' and 'none' are supported.
                     speed: 'slow', // Animation speed. 'normal', 'fast', 'slow' or miliseconds, ignored if animation type is 'none'.
                     delay: null, // Delay between switching slides in miliseconds.
                     direction: 'right', // Direction of the slideshow, 'right', 'left' and 'random' are supported.
