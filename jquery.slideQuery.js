@@ -234,7 +234,8 @@
                     if (lastIdx[index] == random)
                     {
                         // Regenerate random slide index
-                        return plugin.change(index, 'random');
+                        plugin.change(index, 'random');
+                        break;
                     }
 
                     // Set new slide index to the random one
