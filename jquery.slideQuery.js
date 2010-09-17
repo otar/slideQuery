@@ -32,6 +32,7 @@
     {
         slides: null,
         type: 'fade',
+        swapDirection: 'left',
         speed: 'slow',
         delay: null,
         direction: 'right',
@@ -130,7 +131,7 @@
                     if (opts.type == 'swap')
                     {
                         styles = $.extend({}, styles, {
-                            left: me[index].width() + 'px'
+                            left: (opts.swapDirection == 'right' ? -me[index].width() : me[index].width()) + 'px'
                         });
                     }
                     // Assign CSS properties to the current slide
@@ -175,7 +176,7 @@
                 items[index].hide();
 
                 // Show a index slide with animation
-                plugin.animation(index, items[index].eq(idx[index]).addClass('slide-query-active-item') , opts.speedIn);
+                plugin.animation(index, items[index].eq(idx[index]).addClass('slide-query-active-item'), opts.speedIn);
 
                 // Start automatic sliding
                 plugin.start(index);
@@ -250,10 +251,10 @@
             lastIdx[index] = idx[index];
 
             // Switch to newly indexed slide
-            plugin.animation(index, items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item'), opts.speedOut);
-            plugin.animation(index, items[index].eq(idx[index]).addClass('slide-query-active-item'), opts.speedIn);
+            plugin.animation(index, items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item'), direction, opts.speedOut);
+            plugin.animation(index, items[index].eq(idx[index]).addClass('slide-query-active-item'), direction, opts.speedIn);
         },
-        animation: function(index, element, speed, callback)
+        animation: function(index, element, direction, speed)
         {
             // Detect animation type
             switch (opts.type)
@@ -261,20 +262,13 @@
                 default:
                 case 'none':
                     // Instantly display slide without animation
-                    return element.toggle(0, callback);
+                    return element.toggle(0);
                 case 'fade':
                     // Animate slide with fading animation
                     return element.animate({
                         opacity: 'toggle'
                     }, speed, function()
                     {
-                        // Callback hack
-                        if ($.isFunction(callback))
-                        {
-                            // Call callback
-                            callback.call(element);
-                        }
-
                         // Fix IE oppacity fiilter issue with jQuery
                         if (element[0].style.removeAttribute)
                         {
@@ -284,21 +278,40 @@
                     });
                 case 'slide':
                     // Animate slide with sliding animation
-                    return element.slideToggle(speed, callback);
+                    return element.slideToggle(speed);
                 case 'swap':
 
-                    var left = element.css('left') == '0px' ? '-' + me[index].width() : 0;
-                    return element.show().animate({ left: left + 'px' }, speed, function(){
-                        if (left == '-' + me[index].width())
-                        {
-                            element.css('left', me[index].width() + 'px');
-                        }
+                    var xPosition = 0,
+                    containerWidth = me[index].width();
 
-                        // Callback hack
-                        if ($.isFunction(callback))
+                    switch (direction)
+                    {
+                        default:
+                        case 'left':
+                            xPosition = element.css('left') == '0px' ? -containerWidth : 0;
+                            break;
+                        case 'right':
+                            xPosition = element.css('left') == -containerWidth + 'px' ? 0 : containerWidth;
+                            break;
+
+                    }
+
+                    return element.show().animate({ left: xPosition + 'px' }, speed, function(){
+                        switch (direction)
                         {
-                            // Call callback
-                            callback.call(element);
+                            default:
+                            case 'left':
+                                if (xPosition == -containerWidth)
+                                {
+                                    element.css('left', containerWidth + 'px');
+                                }
+                                break;
+                            case 'right':
+                                if (xPosition == containerWidth)
+                                {
+                                    element.css('left', -containerWidth + 'px');
+                                }
+                                break;
                         }
                     });
             }
