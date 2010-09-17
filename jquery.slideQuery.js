@@ -131,7 +131,8 @@
                     if (opts.type == 'swap')
                     {
                         styles = $.extend({}, styles, {
-                            left: (opts.swapDirection == 'right' ? -me[index].width() : me[index].width()) + 'px'
+                            //left: (opts.swapDirection == 'right' ? -me[index].width() : me[index].width()) + 'px'
+                            left: me[index].width() + 'px'
                         });
                     }
                     // Assign CSS properties to the current slide
@@ -176,7 +177,7 @@
                 items[index].hide();
 
                 // Show a index slide with animation
-                plugin.animation(index, items[index].eq(idx[index]).addClass('slide-query-active-item'), opts.speedIn);
+                plugin.animation(index, items[index].eq(idx[index]).addClass('slide-query-active-item'), opts.swapDirection, opts.speedIn);
 
                 // Start automatic sliding
                 plugin.start(index);
@@ -216,7 +217,8 @@
         change: function(index, direction)
         {
             // Count number of slides starting with zero-index
-            var lastSlide = count[index] - 1;
+            var lastSlide = count[index] - 1,
+            swapDirection = opts.swapDirection;
 
             // Detect direction
             switch (direction)
@@ -225,10 +227,16 @@
                 case 'right':
                     // Set new slide index to the next one
                     idx[index] = idx[index] == lastSlide ? 0 : idx[index] + 1;
+
+                    swapDirection = 'left';
+
                     break;
                 case 'left':
                     // Set new slide index to the previous one
                     idx[index] = idx[index] == 0 ? lastSlide : idx[index] - 1;
+
+                    swapDirection = 'right';
+
                     break;
                 case 'random':
                     // Random the slide index
@@ -251,8 +259,8 @@
             lastIdx[index] = idx[index];
 
             // Switch to newly indexed slide
-            plugin.animation(index, items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item'), direction, opts.speedOut);
-            plugin.animation(index, items[index].eq(idx[index]).addClass('slide-query-active-item'), direction, opts.speedIn);
+            plugin.animation(index, items[index].filter('.slide-query-active-item').removeClass('slide-query-active-item'), swapDirection, opts.speedOut);
+            plugin.animation(index, items[index].eq(idx[index]).addClass('slide-query-active-item'), swapDirection, opts.speedIn);
         },
         animation: function(index, element, direction, speed)
         {
@@ -272,7 +280,7 @@
                         // Fix IE oppacity fiilter issue with jQuery
                         if (element[0].style.removeAttribute)
                         {
-                            // Remove MS filter from CSS
+                            // Remove MS filter from styles
                             element[0].style.removeAttribute('filter');
                         }
                     });
@@ -281,21 +289,23 @@
                     return element.slideToggle(speed);
                 case 'swap':
 
+console.log(direction);
+
                     var xPosition = 0,
                     containerWidth = me[index].width();
-
                     switch (direction)
                     {
                         default:
                         case 'left':
                             xPosition = element.css('left') == '0px' ? -containerWidth : 0;
+                            //items[index].not(idx[index]).css('left', containerWidth + 'px');
                             break;
                         case 'right':
                             xPosition = element.css('left') == -containerWidth + 'px' ? 0 : containerWidth;
+                            //items[index].not(idx[index]).css('left', -containerWidth + 'px');
                             break;
 
                     }
-
                     return element.show().animate({ left: xPosition + 'px' }, speed, function(){
                         switch (direction)
                         {
@@ -314,6 +324,7 @@
                                 break;
                         }
                     });
+
             }
         }
     };
